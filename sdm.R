@@ -205,3 +205,4 @@ mapview::mapview(pattern_change, col.regions = color)
 
 # Response curve 
 rcurve(model)
+rcurve(model, id = 2)
