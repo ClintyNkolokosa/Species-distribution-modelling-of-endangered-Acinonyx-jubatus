@@ -173,4 +173,6 @@ plot(change)
 
 mapview::mapview(change)
 
-getEvaluation(model, stat = c('AUC', 'TSS', 'threshold'), opt = 2)
+eval <- getEvaluation(model, stat = c('AUC', 'TSS', 'threshold'), opt = 2)
+
+mean(eval$threshold)
