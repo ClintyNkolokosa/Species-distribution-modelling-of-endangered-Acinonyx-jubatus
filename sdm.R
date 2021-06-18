@@ -177,10 +177,14 @@ eval <- getEvaluation(model, stat = c('AUC', 'TSS', 'threshold'), opt = 2)
 
 mean(eval$threshold)
 
-pa <- raster(ensembled2)
+current_pa <- raster(ensembled2)
 
-pa[] <- ifelse(ensembled2[] >= 0.2592187, 1, 0)
+current_pattern[] <- ifelse(ensembled2[] >= 0.2592187, 1, 0)
 
 plot(pa)
 
 mapview::mapview(pa)
+
+future_pattern <- raster(ensembled_future)
+
+future_pattern[] <- ifelse(ensembled_future[] >= 0.2592187, 1, 0)
