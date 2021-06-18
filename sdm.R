@@ -132,7 +132,9 @@ model <- sdm(presence~.,presence_absence_data, methods = c('glm','gbm','svm','rf
 predicted <- predict(model, biom, 'predictions.img')
 
 gui(model)
+
 plot(predicted[[c(1, 3, 5, 7, 9)]])
+
 plot(predicted[[c(1)]])
 
 ensembled <- ensemble(model, biom,  'ensemble.img',          # current
@@ -200,3 +202,6 @@ color <- colorRampPalette(c('red', 'gray', 'darkgreen')) # extinction, persisten
 plot(pattern_change, col = color(3))
 
 mapview::mapview(pattern_change, col.regions = color)
+
+# Response curve 
+rcurve(model)
