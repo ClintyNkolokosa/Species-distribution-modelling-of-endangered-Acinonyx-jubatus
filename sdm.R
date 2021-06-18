@@ -25,6 +25,41 @@ occ_search(scientificName = "Diceros bicornis", hasCoordinate = TRUE, limit = 10
 
 occ_search(scientificName = "Acinonyx jubatus", hasCoordinate = TRUE, limit = 10)
 
+data(wrld_simpl)
+plot(wrld_simpl, xlim = c(26, 37), ylim = c(-19, -8)) # Extent for Malawi
+plot(wrld_simpl, xlim = c(-12, 40), ylim = c(-30, 25)) # Extent for Africa
+
+points(gbif_cheetah$decimalLongitude, gbif_cheetah$decimalLatitude, 
+       col = 'red',  pch = 19)
+cheetah_location <- sf::st_as_sf(gbif_cheetah,
+                                 coords = c("decimalLongitude", "decimalLatitude"),
+                                 crs = 4326, agr = "constant")
+
+mapview::mapview(cheetah_location)
+
+
+
+# Some coordinates appearing in North America. let's clean them
+library(CoordinateCleaner)
+
+# We use only those data entries with coordinate information - Note that you 
+# don't need this if you have used the hasCoordinate=T in the occ_search() function:
+gbif_cheetah <- subset(gbif_cheetah, !is.na(decimalLatitude))
+
+# We now clean the coordinates and check for outliers - see ?clean_coordinates for more options
+cl_gbif_cheetah <- clean_coordinates(gbif_cheetah, lon = "decimalLongitude", 
+                                     lat = "decimalLatitude", countries = "countryCode", 
+                                     tests = c("centroids", "outliers", "duplicates", "institutions"), 
+                                     inst_rad = 10000)
+
+points(gbif_cheetah$decimalLongitude, gbif_cheetah$decimalLatitude, 
+       col = 'red', pch = 19)
+
+points(gbif_cheetah$decimalLongitude[cl_gbif_cheetah$.summary], 
+       gbif_cheetah$decimalLatitude[cl_gbif_cheetah$.summary], 
+       col = 'blue', pch = 18)
+
+
 
 gbif_cheetah <- occ_search(scientificName = "Acinonyx jubatus", 
                            hasCoordinate = TRUE, limit = 500) 
@@ -100,7 +135,7 @@ gui(model)
 plot(predicted[[c(1, 3, 5, 7, 9)]])
 plot(predicted[[c(1)]])
 
-ensembled <- ensemble(model, biom,  'ensemble.img', 
+ensembled <- ensemble(model, biom,  'ensemble.img',          # current
                       setting = list(methods = 'weights', 
                                       stat = "AUC",
                                       opt = 2))
@@ -121,43 +156,11 @@ names(biof2)
 
 pf <- predict(model, biof2, 'predictionsf.img')
 
-enf <- calc(pf, mean)
+ensembled_future <- calc(pf, mean)
 
-enf <- ensemble(model, biof2, 'ensf.img',
+ensembled_future <- ensemble(model, biof2, 'ensf.img',
                 setting = list(method = 'weights', stat = "TSS", opt = 2))
 
 
+plot(stack(ensembled2, en))
 
-data(wrld_simpl)
-plot(wrld_simpl, xlim = c(26, 37), ylim = c(-19, -8)) # Extent for Malawi
-plot(wrld_simpl, xlim = c(-12, 40), ylim = c(-30, 25)) # Extent for Africa
-
-points(gbif_cheetah$decimalLongitude, gbif_cheetah$decimalLatitude, 
-       col = 'red',  pch = 19)
-cheetah_location <- sf::st_as_sf(gbif_cheetah,
-                                 coords = c("decimalLongitude", "decimalLatitude"),
-                                 crs = 4326, agr = "constant")
-
-mapview::mapview(cheetah_location)
-
-
-
-# Some coordinates appearing in North America. let's clean them
-library(CoordinateCleaner)
-
-# We use only those data entries with coordinate information - Note that you 
-# don't need this if you have used the hasCoordinate=T in the occ_search() function:
-gbif_cheetah <- subset(gbif_cheetah, !is.na(decimalLatitude))
-
-# We now clean the coordinates and check for outliers - see ?clean_coordinates for more options
-cl_gbif_cheetah <- clean_coordinates(gbif_cheetah, lon = "decimalLongitude", 
-                                     lat = "decimalLatitude", countries = "countryCode", 
-                                     tests = c("centroids", "outliers", "duplicates", "institutions"), 
-                                     inst_rad = 10000)
-
-points(gbif_cheetah$decimalLongitude, gbif_cheetah$decimalLatitude, 
-       col = 'red', pch = 19)
-
-points(gbif_cheetah$decimalLongitude[cl_gbif_cheetah$.summary], 
-       gbif_cheetah$decimalLatitude[cl_gbif_cheetah$.summary], 
-       col = 'blue', pch = 18)
