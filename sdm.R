@@ -158,9 +158,19 @@ pf <- predict(model, biof2, 'predictionsf.img')
 
 ensembled_future <- calc(pf, mean)
 
-ensembled_future <- ensemble(model, biof2, 'ensf.img',
+ensembled_future_weighted <- ensemble(model, biof2, 'ensembled future.img',
                 setting = list(method = 'weights', stat = "TSS", opt = 2))
 
 
-plot(stack(ensembled2, en))
+plot(stack(ensembled_future, ensembled2))
 
+mapview::mapview(stack(ensembled_future, ensembled2))
+
+# Calculate change numerically
+change <- ensembled_future - ensembled2
+
+plot(change)
+
+mapview::mapview(change)
+
+getEvaluation(model, stat = c('AUC', 'TSS', 'threshold'), opt = 2)
