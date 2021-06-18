@@ -193,8 +193,10 @@ plot(future_pattern)
 
 mapview::mapview(future_pattern)
 
-pattern_change <- future_pattern-current_pattern
+pattern_change <- future_pattern - current_pattern
 
-plot(pattern_change)
+color <- colorRampPalette(c('red', 'white', 'darkgreen'))
+
+plot(pattern_change, ))
 
 mapview::mapview(pattern_change)
