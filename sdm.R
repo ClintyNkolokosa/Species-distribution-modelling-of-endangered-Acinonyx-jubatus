@@ -180,3 +180,7 @@ mean(eval$threshold)
 pa <- raster(ensembled2)
 
 pa[] <- ifelse(ensembled2[] >= 0.2592187, 1, 0)
+
+plot(pa)
+
+mapview::mapview(pa)
