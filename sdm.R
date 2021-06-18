@@ -188,3 +188,7 @@ mapview::mapview(pa)
 future_pattern <- raster(ensembled_future)
 
 future_pattern[] <- ifelse(ensembled_future[] >= 0.2592187, 1, 0)
+
+plot(future_pattern)
+
+mapview::mapview(future_pattern)
