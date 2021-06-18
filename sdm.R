@@ -195,8 +195,8 @@ mapview::mapview(future_pattern)
 
 pattern_change <- future_pattern - current_pattern
 
-color <- colorRampPalette(c('red', 'gray', 'darkgreen'))
+color <- colorRampPalette(c('red', 'gray', 'darkgreen')) # extinction, persistence and colonization
 
 plot(pattern_change, col = color(3))
 
-mapview::mapview(pattern_change)
+mapview::mapview(pattern_change, col.regions = color)
