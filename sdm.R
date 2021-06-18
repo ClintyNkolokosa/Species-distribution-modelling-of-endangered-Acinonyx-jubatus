@@ -176,3 +176,7 @@ mapview::mapview(change)
 eval <- getEvaluation(model, stat = c('AUC', 'TSS', 'threshold'), opt = 2)
 
 mean(eval$threshold)
+
+pa <- raster(ensembled2)
+
+pa[] <- ifelse(ensembled2[] >= 0.2592187, 1, 0)
